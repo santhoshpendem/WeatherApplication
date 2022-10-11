@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/anime_nav_graph"
+    app:startDestination="@id/SearchCityWeatherFragment">
+
+    <fragment
+        android:id="@+id/SearchCityWeatherFragment"
+        android:name="com.example.lowesapplication.ui.SearchCityWeatherFragment"
+        android:label="SearchCityWeatherFragment" >
+
+        <action
+            android:id="@+id/action_SearchCityWeatherFragment_to_weatherListFragment"
+            app:destination="@id/weatherListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherListFragment"
+        android:name="com.example.lowesapplication.ui.WeatherListFragment"
+        android:label="weather_list_fragment"
+        tools:layout="@layout/weather_list_fragment" >
+        <action
+            android:id="@+id/action_weatherListFragment_to_fullWeatherViewFragment"
+            app:destination="@id/fullWeatherViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullWeatherViewFragment"
+        android:name="com.example.lowesapplication.ui.FullWeatherViewFragment"
+        android:label="full_weather_view_fragment"
+        tools:layout="@layout/full_weather_view_fragment" />
+
+</navigation>
