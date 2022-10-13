@@ -24,15 +24,18 @@ class SearchCityWeatherFragment: Fragment() {
         val button = view.findViewById<Button>(R.id.look_up_city_weather)
         val cityName = view.findViewById<EditText>(R.id.enter_city_name)
 
-        val toolbar = (activity as MainActivity).toolbar
-        toolbar.visibility = View.GONE
-
         viewModel = (activity as MainActivity).viewModel
         button.setOnClickListener {
             viewModel.enteredCity.value = cityName.text.toString()
             viewModel.getWeatherData(cityName.text.toString())
-            findNavController().navigate(R.id.action_SearchCityWeatherFragment_to_weatherListFragment)
+            (activity as MainActivity).navigateTo(R.id.action_SearchCityWeatherFragment_to_weatherListFragment)
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val toolbar = (activity as MainActivity).toolbar
+        toolbar.visibility = View.GONE
     }
 }

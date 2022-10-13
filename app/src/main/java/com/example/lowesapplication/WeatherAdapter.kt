@@ -22,7 +22,6 @@ class WeatherAdapter(
         val dateText: TextView = itemView.findViewById(R.id.compact_date)
         val feelsLikeText: TextView = itemView.findViewById(R.id.compact_feels_like)
         val visibilityText: TextView = itemView.findViewById(R.id.compact_visibility)
-        val weatherItem: CardView = itemView.findViewById(R.id.weather_item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
@@ -65,5 +64,4 @@ class WeatherAdapter(
     override fun getItemCount(): Int {
         return weatherList?.size ?: 0
     }
-
 }

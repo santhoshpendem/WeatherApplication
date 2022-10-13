@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.lowesapplication.MainActivity
 import com.example.lowesapplication.R
 import com.example.lowesapplication.viewmodel.SearchWeatherViewModel
 import com.example.lowesapplication.util.kelvinToFahrenheit
+import com.google.android.material.appbar.MaterialToolbar
 
 class FullWeatherViewFragment : Fragment() {
 
@@ -23,6 +25,8 @@ class FullWeatherViewFragment : Fragment() {
     lateinit var minTemp : TextView
     lateinit var windSpeed : TextView
     lateinit var viewModel: SearchWeatherViewModel
+    lateinit var views:View
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,19 +42,34 @@ class FullWeatherViewFragment : Fragment() {
         minTemp = view.findViewById(R.id.min_temp)
         windSpeed = view.findViewById(R.id.wind_speed)
         viewModel = (activity as MainActivity).viewModel
+        views = view
+        populateUi(view)
 
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
         val toolbar = (activity as MainActivity).toolbar
+
+        setUpToolbar(toolbar)
+    }
+
+    private fun setUpToolbar(toolbar: MaterialToolbar) {
         toolbar.apply {
             visibility = View.VISIBLE
             setTitleTextColor(resources.getColor(R.color.black))
             title = viewModel.enteredCity.value
             setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-            setBackgroundColor(resources.getColor(R.color.purple_700))
+            setBackgroundColor(resources.getColor(R.color.purple_200))
             setNavigationOnClickListener {
-                findNavController().popBackStack()
+              //  views.findNavController().popBackStack()
+                (activity as MainActivity).navigateUp()
             }
         }
+    }
 
+    private fun populateUi(view: View) {
         viewModel.selectedWeatherItem.value.apply {
             temperature.text = kelvinToFahrenheit(this?.main?.temp)
             humidity.text = view.resources.getString(R.string.humidity,this?.main?.humidity.toString())
@@ -63,7 +82,5 @@ class FullWeatherViewFragment : Fragment() {
             )
             windSpeed.text = view.resources.getString(R.string.wind_speed,this?.wind?.speed.toString())
         }
-        return view
     }
-
 }

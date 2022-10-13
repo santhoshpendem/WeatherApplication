@@ -1,5 +1,6 @@
 package com.example.lowesapplication.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class SearchWeatherViewModel(
-    val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository
 ): ViewModel() {
 
     val weatherData: MutableLiveData<Resource<WeatherData>> = MutableLiveData()

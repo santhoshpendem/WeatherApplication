@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lowesapplication.*
 import com.example.lowesapplication.util.Resource
 import com.example.lowesapplication.viewmodel.SearchWeatherViewModel
+import com.google.android.material.appbar.MaterialToolbar
 
 
 /**
@@ -27,31 +28,30 @@ class WeatherListFragment : Fragment() {
     lateinit var viewModel: SearchWeatherViewModel
     lateinit var recyclerView: RecyclerView
     lateinit var progressBar: ProgressBar
+    lateinit var views: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.weather_list_fragment, container, false)
+        views =  inflater.inflate(R.layout.weather_list_fragment, container, false)
+        viewModel = (activity as MainActivity).viewModel
+
+        return views
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val toolbar = (activity as MainActivity).toolbar
+
+        setUpToolbar(toolbar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as MainActivity).viewModel
         recyclerView = view.findViewById(R.id.rv_weather)
         progressBar = view.findViewById(R.id.progressBar)
 
-        val toolbar = (activity as MainActivity).toolbar
-        toolbar.apply {
-            title = viewModel.enteredCity.value
-            setTitleTextColor(resources.getColor(R.color.black))
-            visibility = View.VISIBLE
-            setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-            setBackgroundColor(resources.getColor(R.color.purple_700))
-            setNavigationOnClickListener {
-                view.findNavController().popBackStack()
-            }
-        }
         viewModel.weatherData.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
@@ -62,7 +62,8 @@ class WeatherListFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     hideProgressBar()
-                    view.findNavController().popBackStack()
+                    viewModel.enteredCity.value = ""
+                    (activity as MainActivity).navigateUp()
                     Toast.makeText(
                         view.context,
                         "Please enter a valid city name",
@@ -77,6 +78,21 @@ class WeatherListFragment : Fragment() {
                 }
             }
         })
+    }
+
+
+    private fun setUpToolbar(toolbar: MaterialToolbar) {
+        toolbar.apply {
+            title = viewModel.enteredCity.value
+            setTitleTextColor(resources.getColor(R.color.black))
+            visibility = View.VISIBLE
+            setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+            setBackgroundColor(resources.getColor(R.color.purple_200))
+            setNavigationOnClickListener {
+                (activity as MainActivity).navigateUp()
+               // views.findNavController().popBackStack()
+            }
+        }
     }
 
     private fun setUpRecyclerView(weatherAdapter: WeatherAdapter) {
